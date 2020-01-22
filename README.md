@@ -64,7 +64,7 @@ Open a second terminal window. From within the quarkus-springmp-person directory
 
 1. **Start PostgreSQL** When not running in dev or test mode, quarkus assumes production mode. This applies all properties prefixed with %prod in application.properties as well as properties with no prefix. The person application has configured PostgreSQL as the 'production' database. Run:
    * `docker pull postgres:11.5`
-   * `docker run --detach --name postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=quarkus -p 5432:5432 postgres`
+   * `docker run --detach --name postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=quarkus -p 5432:5432 postgres:11.5`
 2. **Build as a jar file** In the second terminal window:
    * Stop the person application (CTRL-C). 
    * Run `mvn clean package`
@@ -75,3 +75,15 @@ Open a second terminal window. From within the quarkus-springmp-person directory
    * Run `mvn package -Pnative`. Note: Compiling a native binary can take 2.5+ minutes or longer (possibly with compilation warnings) and use over 2GB of ram. Luckily, compiling is a one-time event!
    * Run `target/person-runner`. Note the startup time - roughly .050 milliseconds!
    * As before, test the application by using the browser urls (http://localhost:8080/person and http://localhost:8080/person/greet/1).
+   
+## Metrics && Health
+
+1. **Activate metrics** To view the application metrics, the following dependency must be added to `quarkus-spring-person project`:
+    ```
+   <dependency>
+     <groupId>io.quarkus</groupId>
+     <artifactId>quarkus-smallrye-metrics</artifactId>
+   </dependency>
+   ```
+   Then access: http://localhost:8080/metrics. To display the response as JSON add the header `-H "Accept: application/json"`
+2. **Health status** Ask the endpoint http://localhost:8080/health
